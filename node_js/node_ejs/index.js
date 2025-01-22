@@ -54,8 +54,31 @@ app.listen(port,()=>{
 
  */   
 
-app.get("/rolldice" , (req,res)=>{
-      let data_from_database = Math.floor(Math.random()*6)+1;
-      res.render("rolldice",{data_from_database});
-})
+// app.get("/rolldice" , (req,res)=>{
+
+//       let data_from_database = Math.floor(Math.random()*6)+1;
+  
+//       res.render("rolldice",{data_from_database});
+// })
+
+/**
+conditional statement in ejs 
+ */
+/**
+  instagram ejs
+ */
+
+app.get("/ig/:username",(req,res)=>{
+      
+  console.log("request received")
+
+    let username = req.params.username;
+
+    const instaData = require("./data.json");
+       
+     let data = instaData[username];
+          
+     console.log(data);
+     res.render("instagram.ejs",{data});
+})  
 
