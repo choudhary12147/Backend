@@ -106,16 +106,24 @@ drawbacks -> data sent in query strings is limited
    get and post for form
  */
 
-   app.get("/register" , (req,res)=>{
+  //  app.get("/register" , (req,res)=>{
 
-    let {username , pass } = req.query;
+  //   let {username , pass } = req.query;
     
-         res.send("register success ful");
-   })
+  //        res.send("register success ful");
+  //  })
 
+  app.use(express.urlencoded({extended:true}));
+
+  // for parse json data we use 
+  app.use(express.json());
 
    app.post("/register" , (req,res)=>{
       
+         let { user:username, pass : password} = req.body;
+
+         console.log(username);
+         console.log(password);
 
     res.send("register success ful");
 })

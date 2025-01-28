@@ -23,9 +23,13 @@
 const express =  require("express");
 const { syncBuiltinESMExports } = require("module");
 const path  = require("path");
+const methodOverride = require('method-override')
 const app = express();
+const { v4: uuidv4 } = require('uuid');
 
 const port = 8080;
+
+app.use(methodOverride('_method'));
 
 app.use(express.urlencoded({extended:true}));
 
@@ -43,15 +47,19 @@ app.listen(port,()=>{
 
 let posts = [
 
-       {name:"sunil",
+       { 
+         id:uuidv4(),
+         name:"sunil",
         content:"hard work is key of success"   
        }
        ,
        {
+          id:uuidv4(),
           name:"amit",
           content:"with hardwork smartwork is also needed"
        },
        {
+          id:uuidv4(),
           name:"suresh",
           content:"i am a motivater"
        }
@@ -67,9 +75,45 @@ app.get("/posts/new",(req,res)=>{
       res.render("new.ejs");
 })
 
+app.get("/posts/:id",(req,res)=>{
+
+   let {id} = req.params;
+
+   let post = posts.find( p => p.id === id);
+     res.render("show.ejs",{post});  
+
+})
+
 app.post("/posts",(req,res)=>{
     let {username , content} = req.body;
-    posts.push({username,content});
+       let id = uuidv4();
+    posts.push({id,username,content});
     res.redirect("/posts");
     
+})
+
+/**
+  uuid package -> universally unique identifier
+ */
+// patch
+
+
+app.get("/posts/:id/edit",(req,res)=>{
+     
+     let {id} =  req.params;
+      
+      let post = posts.find(post => post.id === id);
+
+     res.render("edit.ejs",{post});
+})
+
+
+app.patch("/posts/:id", (req,res)=>{
+
+   let {id} = req.params;
+   let newContent = req.body.content;
+   let post = posts.find(post => post.id === id);
+     post.content = newContent;
+  res.redirect("/posts");
+
 })
